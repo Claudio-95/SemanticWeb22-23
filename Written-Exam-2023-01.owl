@@ -1,0 +1,514 @@
+@prefix : <http://www.semanticweb.org/Written-exam-2023-01#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/Written-exam-2023-01> .
+
+<http://www.semanticweb.org/Written-exam-2023-01> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/Written-exam-2023-01#belongsTo
+:belongsTo rdf:type owl:ObjectProperty ;
+           owl:inverseOf :contains ;
+           rdfs:domain :Manuscript ;
+           rdfs:range :LiteraryGenre ;
+           rdfs:comment "belongsTo relates a manuscript to a literary genre."^^xsd:string ;
+           rdfs:label "belongs to"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#collects
+:collects rdf:type owl:ObjectProperty ;
+          owl:inverseOf :isCollectedIn ;
+          rdf:type owl:InverseFunctionalProperty ;
+          rdfs:domain :Library ;
+          rdfs:range :Manuscript ;
+          rdfs:comment "collects relates a library to the manuscript in which it is collected."^^xsd:string ;
+          rdfs:label "collects"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#contains
+:contains rdf:type owl:ObjectProperty ;
+          rdfs:domain :LiteraryGenre ;
+          rdfs:range :Manuscript ;
+          rdfs:comment "contains relates a literary genre to the manuscript to which it belongs."^^xsd:string ;
+          rdfs:label "contains"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasAuthor
+:hasAuthor rdf:type owl:ObjectProperty ;
+           owl:inverseOf :isAuthorOf ;
+           rdfs:domain :Manuscript ;
+           rdfs:range :Author ;
+           rdfs:comment "hasAuthor relates a manuscript to its author."^^xsd:string ;
+           rdfs:label "has as author"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasLocated
+:hasLocated rdf:type owl:ObjectProperty ;
+            owl:inverseOf :isLocatedIn ;
+            rdf:type owl:InverseFunctionalProperty ;
+            rdfs:domain :Place ;
+            rdfs:range :Library ;
+            rdfs:comment "hasLocated relates a place to the library where it is located."^^xsd:string ;
+            rdfs:label "has located"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasPublicationAgreementWith
+:hasPublicationAgreementWith rdf:type owl:ObjectProperty ;
+                             owl:inverseOf :isInAgreementWith ;
+                             rdfs:domain :Publisher ;
+                             rdfs:range :Library ;
+                             owl:propertyChainAxiom ( :publishes
+                                                      :includes
+                                                      :isCollectedIn
+                                                    ) ;
+                             rdfs:comment "hasPublicationAgreementWith relates a publisher to the library where the manuscript included in the book sold by publisher is collected."^^xsd:string ;
+                             rdfs:label "has a publication agreement with"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#includes
+:includes rdf:type owl:ObjectProperty ;
+          owl:inverseOf :isIncludedIn ;
+          rdfs:domain :Book ;
+          rdfs:range :Manuscript ;
+          rdfs:comment "includes relates a book to the manuscript in which it is included."^^xsd:string ;
+          rdfs:label "includes"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isAuthorOf
+:isAuthorOf rdf:type owl:ObjectProperty ;
+            rdfs:domain :Author ;
+            rdfs:range :Manuscript ;
+            rdfs:comment "isAuthorOf relates an author to his manuscript."^^xsd:string ;
+            rdfs:label "is author of"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isCollectedIn
+:isCollectedIn rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain :Manuscript ;
+               rdfs:range :Library ;
+               rdfs:comment "isCollectedIn relates a manuscript to the library where it is collected."^^xsd:string ;
+               rdfs:label "is collected in"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isInAgreementWith
+:isInAgreementWith rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Library ;
+                   rdfs:range :Publisher ;
+                   rdfs:comment "isInAgreementWith relates a library to the publisher it has an agreement with."^^xsd:string ;
+                   rdfs:label "is in agreement with"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isIncludedIn
+:isIncludedIn rdf:type owl:ObjectProperty ;
+              rdfs:domain :Manuscript ;
+              rdfs:range :Book ;
+              rdfs:comment "isIncludedIn relates a manuscript to a book in which it is included."^^xsd:string ;
+              rdfs:label "is included in"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isLocatedIn
+:isLocatedIn rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Library ;
+             rdfs:range :Place ;
+             rdfs:comment "isLocatedIn relates a library to its place."^^xsd:string ;
+             rdfs:label "is located in"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#isPublishedBy
+:isPublishedBy rdf:type owl:ObjectProperty ;
+               owl:inverseOf :publishes ;
+               rdf:type owl:FunctionalProperty ;
+               rdfs:domain :Book ;
+               rdfs:range :Publisher ;
+               rdfs:comment "isPublishedBy relates a book to its publisher."^^xsd:string ;
+               rdfs:label "is published by"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#publishes
+:publishes rdf:type owl:ObjectProperty ,
+                    owl:InverseFunctionalProperty ;
+           rdfs:domain :Publisher ;
+           rdfs:range :Book ;
+           rdfs:comment "publishes relates a publisher to a book."^^xsd:string ;
+           rdfs:label "publishes"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#sellsBookOf
+:sellsBookOf rdf:type owl:ObjectProperty ;
+             owl:inverseOf :sellsThrough ;
+             rdfs:domain :Bookshop ;
+             rdfs:range :Publisher ;
+             rdfs:comment "sellsBookOf relates a bookshop to a publisher who publishes the sold book."^^xsd:string ;
+             rdfs:label "sells book of"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#sellsThrough
+:sellsThrough rdf:type owl:ObjectProperty ;
+              rdfs:domain :Publisher ;
+              rdfs:range :Bookshop ;
+              rdfs:comment "sellsThrough relates a publisher to a bookshop through the sale of its book."^^xsd:string ;
+              rdfs:label "sells book through"^^xsd:string .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasBookTitle
+:hasBookTitle rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Book ;
+              rdfs:range xsd:string ;
+              rdfs:comment "hasBookTitle relates a book and its title as string."^^xsd:string ;
+              rdfs:label "has as book title"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasDateOfCreation
+:hasDateOfCreation rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Manuscript ;
+                   rdfs:range xsd:dateTime ;
+                   rdfs:comment "hasDateOfCreation relates a manuscript and the date of creation."^^xsd:string ;
+                   rdfs:label "has date"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasID
+:hasID rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Manuscript ;
+       rdfs:range xsd:string ;
+       rdfs:comment "hasID relates a manuscript and its ID as string."^^xsd:string ;
+       rdfs:label "has ID"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasIDPositive
+:hasIDPositive rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Publisher ;
+               rdfs:range xsd:positiveInteger ;
+               rdfs:comment "hasIDPos relates a publisher and its ID as positive integer."^^xsd:string ;
+               rdfs:label "has ID as positive integer"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasISBN
+:hasISBN rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Book ;
+         rdfs:range xsd:string ;
+         rdfs:comment "hasISBN relates a book and the ISBN code."^^xsd:string ;
+         rdfs:label "has ISBN code"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Publisher ;
+         rdfs:range xsd:string ;
+         rdfs:comment "hasName relates a publisher and its name."^^xsd:string ;
+         rdfs:label "has name"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#hasTitle
+:hasTitle rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :Manuscript ;
+          rdfs:range xsd:string ;
+          rdfs:comment "hasTitle relates a manuscript and its title as string."^^xsd:string ;
+          rdfs:label "has as title" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Author
+:Author rdf:type owl:Class ;
+        rdfs:comment "An author is a person who creates a manuscript."^^xsd:string ;
+        rdfs:label "Author"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Book
+:Book rdf:type owl:Class ;
+      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                        owl:onProperty :isPublishedBy ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Publisher
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasBookTitle ;
+                        owl:someValuesFrom xsd:string
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasISBN ;
+                        owl:someValuesFrom xsd:string
+                      ] ;
+      rdfs:comment "A book contains a manuscript, is published by a publisher and is sold through a bookshop."^^xsd:string ;
+      rdfs:label "Book"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Bookshop
+:Bookshop rdf:type owl:Class ;
+          rdfs:comment "A bookshop is a retailer that sells books."^^xsd:string ;
+          rdfs:label "Bookshop"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Library
+:Library rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :isLocatedIn ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onClass :Place
+                         ] ;
+         rdfs:comment "A library collects a manuscript and can be a private library or a public library. It is located in one place."^^xsd:string ;
+         rdfs:label "Library"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#LiteraryGenre
+:LiteraryGenre rdf:type owl:Class ;
+               rdfs:comment "A literary genre is a category of a literary writing."^^xsd:string ;
+               rdfs:label "Literary genre"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Manuscript
+:Manuscript rdf:type owl:Class ;
+            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                              owl:onProperty :belongsTo ;
+                              owl:someValuesFrom :LiteraryGenre
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasAuthor ;
+                              owl:someValuesFrom :Author
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :isIncludedIn ;
+                              owl:someValuesFrom :Book
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :isCollectedIn ;
+                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                              owl:onClass :Library
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasDateOfCreation ;
+                              owl:someValuesFrom xsd:dateTime
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasID ;
+                              owl:someValuesFrom xsd:string
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasTitle ;
+                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                              owl:onDataRange xsd:string
+                            ] ;
+            rdfs:comment "A manuscript is a conceptual and immaterial outcome of an intellectual or creative process. It has one title, an author and a date of creation. It can be a Medieval manuscript or a Renaissance manuscript. It belongs to at least one literary genre. It is collected in exactly one library and is included in at least one book."^^xsd:string ;
+            rdfs:label "Manuscript"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#MedievalManuscript
+:MedievalManuscript rdf:type owl:Class ;
+                    rdfs:subClassOf :Manuscript ;
+                    owl:disjointWith :RenaissanceManuscript ;
+                    rdfs:comment "A Medieval manuscript is a manuscript made in the medieval period by an author."^^xsd:string ;
+                    rdfs:label "Medieval manuscript"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Place
+:Place rdf:type owl:Class ;
+       rdfs:comment "A place is where a library is located."^^xsd:string ;
+       rdfs:label "Place"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#PrivateLibrary
+:PrivateLibrary rdf:type owl:Class ;
+                rdfs:subClassOf :Library ;
+                owl:disjointWith :PublicLibrary ;
+                rdfs:comment "A private library is a library that is privately owned and access is restricted."^^xsd:string ;
+                rdfs:label "Private library"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#PublicLibrary
+:PublicLibrary rdf:type owl:Class ;
+               rdfs:subClassOf :Library ;
+               rdfs:comment "A public library is a library to which access is free."^^xsd:string ;
+               rdfs:label "Public library"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Publisher
+:Publisher rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasPublicationAgreementWith ;
+                             owl:someValuesFrom :Library
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :publishes ;
+                             owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Book
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :sellsThrough ;
+                             owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Bookshop
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasIDPositive ;
+                             owl:someValuesFrom xsd:positiveInteger
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasName ;
+                             owl:someValuesFrom xsd:string
+                           ] ;
+           rdfs:comment "A publisher is an organization that publishes a book and sells it through bookshops."^^xsd:string ;
+           rdfs:label "Publisher"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#RenaissanceManuscript
+:RenaissanceManuscript rdf:type owl:Class ;
+                       rdfs:subClassOf :Manuscript ;
+                       rdfs:comment "A Renaissance manuscript is a manuscript made in the Renaissance period by an author."^^xsd:string ;
+                       rdfs:label "Renaissance manuscript"^^xsd:string .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Book1
+:Book1 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :includes :RenaissanceManuscript1 ;
+       :isPublishedBy :Publisher1 ;
+       :hasBookTitle "Book 1"^^xsd:string ;
+       :hasISBN "978-3-16-148410-0"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Book2
+:Book2 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :includes :MedievalManuscript1 ;
+       :isPublishedBy :Publisher1 ;
+       :hasBookTitle "Book 2"^^xsd:string ;
+       :hasISBN "978-3-16-142410-0"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Bookshop1
+:Bookshop1 rdf:type owl:NamedIndividual ,
+                    :Bookshop ;
+           :sellsBookOf :Publisher1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Bookshop2
+:Bookshop2 rdf:type owl:NamedIndividual ,
+                    :Bookshop ;
+           :sellsBookOf :Publisher1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#LiteraryGenre1
+:LiteraryGenre1 rdf:type owl:NamedIndividual ,
+                         :LiteraryGenre ;
+                :contains :RenaissanceManuscript1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#LiteraryGenre2
+:LiteraryGenre2 rdf:type owl:NamedIndividual ,
+                         :LiteraryGenre ;
+                :contains :MedievalManuscript1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#MarioBianchi
+:MarioBianchi rdf:type owl:NamedIndividual ,
+                       :Author ;
+              :isAuthorOf :MedievalManuscript1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#MarioRossi
+:MarioRossi rdf:type owl:NamedIndividual ,
+                     :Author ;
+            :isAuthorOf :RenaissanceManuscript1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#MedievalManuscript1
+:MedievalManuscript1 rdf:type owl:NamedIndividual ,
+                              :MedievalManuscript ;
+                     :belongsTo :LiteraryGenre2 ;
+                     :hasAuthor :MarioBianchi ;
+                     :isCollectedIn :PrivateLibrary1 ;
+                     :isIncludedIn :Book2 ;
+                     :hasDateOfCreation "1294-01-01T00:00:00"^^xsd:dateTime ;
+                     :hasID "1"^^xsd:string ;
+                     :hasTitle "Medieval 1"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Place1
+:Place1 rdf:type owl:NamedIndividual ,
+                 :Place ;
+        :hasLocated :PublicLibrary1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Place2
+:Place2 rdf:type owl:NamedIndividual ,
+                 :Place ;
+        :hasLocated :PrivateLibrary1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#PrivateLibrary1
+:PrivateLibrary1 rdf:type owl:NamedIndividual ,
+                          :PrivateLibrary ;
+                 :collects :MedievalManuscript1 ;
+                 :isInAgreementWith :Publisher1 ;
+                 :isLocatedIn :Place2 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#PublicLibrary1
+:PublicLibrary1 rdf:type owl:NamedIndividual ,
+                         :PublicLibrary ;
+                :collects :RenaissanceManuscript1 ;
+                :isInAgreementWith :Publisher1 ;
+                :isLocatedIn :Place1 .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#Publisher1
+:Publisher1 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :hasPublicationAgreementWith :PrivateLibrary1 ,
+                                         :PublicLibrary1 ;
+            :publishes :Book1 ,
+                       :Book2 ;
+            :sellsThrough :Bookshop1 ,
+                          :Bookshop2 ;
+            :hasIDPositive "1"^^xsd:positiveInteger ;
+            :hasName "Publisher 1"^^xsd:string .
+
+
+###  http://www.semanticweb.org/Written-exam-2023-01#RenaissanceManuscript1
+:RenaissanceManuscript1 rdf:type owl:NamedIndividual ,
+                                 :RenaissanceManuscript ;
+                        :belongsTo :LiteraryGenre1 ;
+                        :hasAuthor :MarioRossi ;
+                        :isCollectedIn :PublicLibrary1 ;
+                        :isIncludedIn :Book1 ;
+                        :hasDateOfCreation "1520-01-01T00:00:00"^^xsd:dateTime ;
+                        :hasID "2"^^xsd:string ;
+                        :hasTitle "Renaissance 1"^^xsd:string .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Author
+                :Book
+                :Bookshop
+                :Library
+                :LiteraryGenre
+                :Manuscript
+                :Place
+                :Publisher
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
